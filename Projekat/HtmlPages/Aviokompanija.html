@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
+    <script src="/Scripts/jquery-3.4.1.js"></script>
+    <style>
+        table {
+            border:0px;
+        }
+        tr{
+            height:60px;
+        }
+        th{
+            font-size:25px;
+        }
+    </style>
+    <script>
+
+        var listRecenzije;
+
+        $(document).ready(function () {
+
+            let nazivAviokompani;
+            let searchParam = new URLSearchParams(window.location.search);
+
+            if (searchParam.has('naziv')){
+                nazivAviokompani = searchParam.get('naziv');
+
+                document.title = nazivAviokompani;
+
+                $.get('/aviokompanija?naziv=' + nazivAviokompani + '', function (data, status) {
+
+                    if (data == null) {
+                        let errorInfo = "<h1>Ne postoji aviokompanija sa nazivom: " + nazivAviokompani + "</h1>";
+                        $('#tablemesto').html(errorInfo);
+                        return;
+                    }
+
+                    let kompanijaInfo = "<h1>"+ nazivAviokompani + " informacije</h1>";
+
+                    kompanijaInfo += "<table id=\"letovi\"><tr><th>Naziv</th></tr>";
+                    kompanijaInfo += "<tr><td  style=\"min-width:300px;\">" + data.naziv + "</td></tr>"
+                    kompanijaInfo += "<tr><th>Adresa</th></tr>";
+                    kompanijaInfo += "<tr><td>" + data.adresa + "</td></tr>";
+                    kompanijaInfo += "<tr><th>Kontakt Informacije</th></tr>";
+                    kompanijaInfo += "<tr><td>"+data.kontaktinformacije + "</td></tr>";
+                    kompanijaInfo += "</table>";
+                    kompanijaInfo += "<h1>Recenzije za kompanija</h1>"
+                    kompanijaInfo += "<table style=\"border:0px;\" id=\"recenzijeTable\"></table>";
+                    $('#tablemesto').html(kompanijaInfo);
+
+                    
+                    $.ajax({
+                        url: '/recenzija/getbycompany?naziv=' + nazivAviokompani,
+                        type: "GET",
+                        complete: function (data) {
+                            if (data.status == 200) {
+                                listRecenzije = data.responseJSON;
+                                fillTheTable("recenzijeTable", listRecenzije);
+                            } else {
+                                $(location).prop('href', '/HtmlPages/Index.html');
+                            }
+                        }
+                    });
+
+                });
+            } else {
+                $(location).prop('href', '/HtmlPages/Index.html');
+            }
+        });
+
+
+
+        function fillTheTable(tableName, data) {
+
+            tableLetovi = "<tr><th>Let</th><th>Korisnicko Ime</th><th>Vise Informacija</th></tr>";
+            var status;
+
+            for (index in data) {
+
+                tableLetovi += "<tr><td><a href=\"Let.html?id=" + data[index].idleta + "\">Let Info</a></td><td>" + data[index].recezentusername + "</td>";
+                tableLetovi += "<td><a href=\"RecenzijeInfo.html?korisnickoime=" + data[index].recezentusername + "&idleta=" + data[index].idleta + "\">Info</a></td></tr>"
+            }
+            if (data.length > 0) {
+                $("#" + tableName).html(tableLetovi);
+            }
+        }
+
+
+    </script>
+</head>
+<body>
+    <div class="menubar">
+        <ul class="menulist">
+            <li>
+                <a class="menuitem" href="/HtmlPages/Index.html">Početna Stranica</a>
+            </li>
+        </ul>
+    </div>
+    <div id="tablemesto"></div>
+</body>
+</html>

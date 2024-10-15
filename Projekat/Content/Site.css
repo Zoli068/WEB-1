@@ -1,0 +1,81 @@
+﻿div.menubar{
+    margin:0px;
+    padding:5px;
+    background:gray;
+}
+
+ul.menulist{
+    padding:5px;
+    margin:0px;
+    justify-content:space-between;
+    display:flex;
+    list-style-type:none;
+}
+
+div.body{
+    margin:8px;
+}
+
+ul.menulist li{
+    display:inline-block;
+}
+
+li.loginSection{
+}
+
+a.menuitem {
+    color: white;
+    margin-right:5px;
+    font-weight: 600;
+    font-size: x-large;
+    text-decoration:none;
+}
+
+a.menuitem:hover{
+    color:royalblue;
+    cursor:pointer;
+}
+
+body{
+    margin:0px;
+}
+
+html * {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+h1{
+    text-align:center;
+    color:dodgerblue;
+}
+
+h3 {
+    text-align:center;
+}
+
+h2 {
+    text-align:center;
+    color:deepskyblue;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+    border: solid 2px Gray;
+    border-radius: 10px;
+}
+
+th{
+    background:lightblue;
+}
+
+td,th{
+    min-width:40px;
+    padding:5px;
+    text-align:center;
+    border:solid 2px Gray;
+    border-radius:10px;
+    font-size:18px;
+}
+

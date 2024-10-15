@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" lang="en" />
+    <title>Recenzija</title>
+    <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
+    <script src="/Scripts/jquery-3.4.1.js"></script>
+    <script>
+
+        var authtoken = sessionStorage.getItem("authtoken");
+        var idLeta;
+        var korisnickoime;
+        var recenzija;
+
+        $(document).ready(function () {
+
+            if (authtoken == null) {
+                authtoken = "";
+            }
+
+            let searchParam = new URLSearchParams(window.location.search);
+
+            if (searchParam.has('korisnickoime') && searchParam.has("idleta")) {
+                idLeta = searchParam.get('idleta');
+                korisnickoime = searchParam.get('korisnickoime');
+                if (idLeta == "" || korisnickoime == "") {
+                    $(location).prop('href', '/HtmlPages/Index.html');
+                }
+            }
+
+            $.ajax({
+                url: "/recenzija/getrecenzija?korisnickoime=" + korisnickoime + "&idleta=" + idLeta,
+                type: "GET",
+                headers: {
+                    "authtoken": authtoken
+                },
+                complete: function (data) {
+                    if (data.status != 200) {
+                        $(location).prop('href', '/HtmlPages/Index.html');
+                    }
+
+                    $('#naslovTable').html(data.responseJSON["naslov"]);
+                    $('#usernameTable').html(data.responseJSON["recezentusername"]);
+                    $('#sadrzajTable').html(data.responseJSON["sadrzaj"]);
+                    let statusRecenzija;
+
+                    if (data.responseJSON.status == 0) {
+                        statusRecenzija = "Kreirana";
+                    } else if (data.responseJSON.status == 1) {
+                        statusRecenzija = "Odobrena";
+                    } else {
+                        statusRecenzija = "Odbijena";
+                    }
+                    $('#statusTable').html(statusRecenzija);
+
+                    if (data.responseJSON.putanjaslike == null || data.responseJSON.putanjaslike == "") {
+                        $("#slikaPrikaz").attr("visibility", "hidden");
+                        $("#slikaPrikaz").remove();
+                        $("#slikaHeader").remove();
+                        $("#slikaKolona").remove();
+                    } else {
+                        $('#slikaPrikaz').attr("src", "/Images/" + data.responseJSON.putanjaslike);
+                    }
+                }
+            });
+
+        });
+
+
+        function letInformacija() {
+            $(location).prop('href', '/HtmlPages/Let.html?id=' + idLeta);
+        }
+</script>
+
+</head >
+        <body>
+            <div class="menubar">
+                <ul class="menulist">
+                    <li>
+                        <a class="menuitem" href="/HtmlPages/Index.html">Početna Stranica</a>
+                    </li>
+                </ul>
+            </div>
+            <h1 id="naslovSite">Recenzija</h1>
+
+            <div id="infoRecenzija">
+                <table style="border:0px;">
+                    <tr><th>Naslov</th></tr>
+                    <tr><td id="naslovTable"></td></tr>                    
+                    <tr><th>Korisnicko Ime</th></tr>
+                    <tr><td id="usernameTable"></td></tr>
+                    <tr><th>Sadrzaj</th></tr>
+                    <tr><td id="sadrzajTable"></td></tr>
+                    <tr><th>Status</th></tr>
+                    <tr><td id="statusTable"></td></tr>
+                    <tr><th><a onclick="letInformacija()" style="text-decoration:underline;">Vise informacije o letu</a></th></tr>
+                    <tr><th id="slikaHeader">Slika</th></tr>
+
+                    <tr><td id="slikaKolona"><img width="400" id="slikaPrikaz" /></td></tr>
+                </table>
+            </div>
+        </body>
+</html >

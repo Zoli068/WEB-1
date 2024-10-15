@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" lang="en" />
+    <title>Administracija rezervacije</title>
+    <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
+    <script src="/Scripts/jquery-3.4.1.js"></script>
+    <script>
+
+        var listRecenzije;
+        var authtoken = sessionStorage.getItem("authtoken");
+
+        $(document).ready(function () {
+
+
+            $.ajax({
+                url: "/checklogin",
+                type: "GET",
+                headers: {
+                    "authtoken": authtoken
+                },
+                complete: function (data) {
+                    if (data.statusText != "OK") {
+                        $(location).prop('href', '/HtmlPages/Index.html');
+                    } else if (data.responseJSON.tipKorisnika == 0) {
+                        $(location).prop('href', '/HtmlPages/Index.html');
+                    }
+                }
+            });
+
+            $.ajax({
+                url: '/recenzija/getall',
+                type: "GET",
+                headers: {
+                    "authtoken": authtoken
+                },
+                complete: function (data) {
+                    if (data.status == 200) {
+                        listRecenzije = data.responseJSON;
+                        fillTheTable("recenzijeTable", listRecenzije);
+                    }
+                }
+            });
+
+        });
+
+        function fillTheTable(tableName, data) {
+
+            let tableLetovi = "<tr><th>Let</th><th>Aviokompanije</th><th>Korisnicko Ime</th><th>Status</th><th>Odobriti</th><th>Otkazati</th><th>Vise Informacija</th></tr>"
+            var status;
+
+            for (index in data) {
+
+                if (data[index]["status"] == 0) {
+                    status = "Kreirana";
+                } else if (data[index]["status"] == 1) {
+                    status = "Odobrena";
+                } else {
+                    status = "Odbijena";
+                };
+
+                tableLetovi += "<tr><td><a href=\"Let.html?id=" + data[index].idleta + "\">Let Info</a></td><td><a href=\"Aviokompanija.html?naziv=" + data[index].nazivkompanija + "\">" + data[index].nazivkompanija + "</a></td><td>" + data[index].recezentusername + "</td>";
+                tableLetovi += "<td>" + status + "</td>";
+                tableLetovi += "<td><button onclick=\"updatovati(" + index + ",true" + ")\">Odobriti</button></td><td><button onclick=\"updatovati(" + index + ",false" + ")\">Odbiti</button></td>";
+                tableLetovi += "<td><a href=\"RecenzijeInfo.html?korisnickoime=" + data[index].recezentusername + "&idleta=" + data[index].idleta + "\">Info</a></td></tr>"
+            }
+
+            $("#" + tableName).html(tableLetovi);
+        }
+
+        function updatovati(index,opcija) {
+
+            if (listRecenzije[index].status != 0) {
+                $("#recenzijeResponse").html("Status recenzija mora da bude Kreirana");
+                return;
+            }
+
+            let status;
+            if (opcija) {
+                status = 1;
+            } else {
+                status = 2;
+            }
+
+
+            let responseobject = new Object();
+            responseobject["status"] = status;
+            responseobject["idleta"] = listRecenzije[index].idleta;
+            responseobject["recezentusername"] = listRecenzije[index].recezentusername;
+
+            let poruka = JSON.stringify(responseobject);
+
+            $.ajax({
+                url: "/recenzija/update",
+                type: "PUT",
+                headers: {
+                    "authtoken": authtoken
+                },
+                data: poruka,
+                contentType: "application/json",
+                dataType: "json",
+                complete: function (data) {
+                    if (data.statusText == "OK") {
+                        location.reload();
+                    }  
+                }
+            });
+
+            $("#recenzijeResponse").html("");
+        }
+
+    </script>
+</head>
+
+<body>
+    <div class="menubar">
+        <ul class="menulist">
+            <li>
+                <a class="menuitem" href="/HtmlPages/Index.html">Početna Stranica</a>
+            </li>
+        </ul>
+    </div>
+    <h1>Recenzije</h1>
+    <div id="recenzijeDiv">
+        <table id="recenzijeTable">
+        </table>
+        <h3 id="recenzijeResponse"></h3>
+    </div>
+
+</body>
+</html>

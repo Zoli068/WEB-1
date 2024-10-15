@@ -1,0 +1,47 @@
+[
+  {
+    "korisnickoime": "Fodi",
+    "idleta": "3b22a176-fb99-4653-b597-5ed985f9375c",
+    "nazivAviokompanija": "RyanAir",
+    "isDeleted": false,
+    "brojputnika": 3,
+    "ukupnacena": 1501.62,
+    "status": 0
+  },
+  {
+    "korisnickoime": "Fodi",
+    "idleta": "3a5dc831-1935-4316-aa24-359ad2f98af3",
+    "nazivAviokompanija": "Lufthansa",
+    "isDeleted": false,
+    "brojputnika": 1,
+    "ukupnacena": 1024.54,
+    "status": 1
+  },
+  {
+    "korisnickoime": "Fodi",
+    "idleta": "5c4accb4-9579-447f-bcb1-1a534b79236f",
+    "nazivAviokompanija": "AirSerbia",
+    "isDeleted": false,
+    "brojputnika": 1,
+    "ukupnacena": 200.12,
+    "status": 3
+  },
+  {
+    "korisnickoime": "Fodi",
+    "idleta": "1a534b74-9579-212f-bcb1-5c4acc9236f",
+    "nazivAviokompanija": "BoingLet",
+    "isDeleted": false,
+    "brojputnika": 1,
+    "ukupnacena": 200.12,
+    "status": 3
+  },
+  {
+    "korisnickoime": "Veljkoo",
+    "idleta": "d687bdba-4895-4ce5-b0bb-50b3038e5b7a",
+    "nazivAviokompanija": "AirSerbia",
+    "isDeleted": false,
+    "brojputnika": 2,
+    "ukupnacena": 400.24,
+    "status": 2
+  }
+]

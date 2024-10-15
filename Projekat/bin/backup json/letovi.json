@@ -1,0 +1,67 @@
+[
+  {
+    "identificator": "3a5dc831-1935-4316-aa24-359ad2f98af3",
+    "nazivkompanija": "Lufthansa",
+    "isDeleted": false,
+    "polaznadestinacija": "Beograd",
+    "odredisnadestinacija": "Berlin",
+    "vremepolaska": "2024-07-30T15:35:23",
+    "vremedolaska": "2024-07-30T20:35:23",
+    "slobodnihmesta": 29,
+    "zauzetihmesta": 1,
+    "cena": 1024.54,
+    "status": 0
+  },
+  {
+    "identificator": "3b22a176-fb99-4653-b597-5ed985f9375c",
+    "nazivkompanija": "RyanAir",
+    "isDeleted": false,
+    "polaznadestinacija": "London",
+    "odredisnadestinacija": "Miami",
+    "vremepolaska": "2024-11-30T15:35:23",
+    "vremedolaska": "2024-11-30T20:45:23",
+    "slobodnihmesta": 27,
+    "zauzetihmesta": 3,
+    "cena": 500.54,
+    "status": 0
+  },
+  {
+    "identificator": "d687bdba-4895-4ce5-b0bb-50b3038e5b7a",
+    "nazivkompanija": "AirSerbia",
+    "isDeleted": false,
+    "polaznadestinacija": "Beograd",
+    "odredisnadestinacija": "Sydney",
+    "vremepolaska": "2024-06-30T10:35:23",
+    "vremedolaska": "2024-06-30T20:45:23",
+    "slobodnihmesta": 28,
+    "zauzetihmesta": 2,
+    "cena": 200.12,
+    "status": 1
+  },
+  {
+    "identificator": "5c4accb4-9579-447f-bcb1-1a534b79236f",
+    "nazivkompanija": "AirSerbia",
+    "isDeleted": false,
+    "polaznadestinacija": "Beograd",
+    "odredisnadestinacija": "Sydney",
+    "vremepolaska": "2024-02-20T10:35:23",
+    "vremedolaska": "2024-02-20T20:45:23",
+    "slobodnihmesta": 29,
+    "zauzetihmesta": 1,
+    "cena": 200.12,
+    "status": 2
+  },
+  {
+    "identificator": "1a534b74-9579-212f-bcb1-5c4acc9236f",
+    "nazivkompanija": "BoingLet",
+    "isDeleted": false,
+    "polaznadestinacija": "Rusko Selo",
+    "odredisnadestinacija": "Novi Sad",
+    "vremepolaska": "2024-01-20T10:35:23",
+    "vremedolaska": "2024-01-21T20:45:23",
+    "slobodnihmesta": 29,
+    "zauzetihmesta": 1,
+    "cena": 200.12,
+    "status": 2
+  }
+]

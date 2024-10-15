@@ -1,0 +1,426 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" lang="en" />
+    <title>Administracija letovi</title>
+    <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
+    <script src="/Scripts/jquery-3.4.1.js"></script>
+    <script>
+
+        var authtoken = sessionStorage.getItem("authtoken");
+        var listLetova;
+        var prikazeniLetovi;
+
+        $(document).ready(function () {
+
+            if (authtoken == null) {
+                authtoken = "";
+            }
+
+            $.ajax({
+                url: "/checklogin",
+                type: "GET",
+                headers: {
+                    "authtoken": authtoken
+                },
+                complete: function (data) {
+                    if (data.statusText != "OK") {
+                        $(location).prop('href', '/HtmlPages/Index.html');
+                    } else if (data.responseJSON.tipKorisnika == 0) {
+                        $(location).prop('href', '/HtmlPages/Index.html');
+                    }
+                }
+            });
+
+            $.ajax({
+                url: '/letovi/get',
+                type: "GET",
+                headers: {
+                    "authtoken": authtoken
+                },
+                complete: function (data) {
+                    if (data.status == 200) {
+                        listLetova = data.responseJSON;
+                        fillTheTable("letoviTable", listLetova);
+                    }
+                }
+            });
+        });
+
+
+        function fillTheTable(tableName, data) {
+
+            let tableLetovi = "<tr><th>Aviokompanija</th><th>Polazak</th><th>Odredista</th><th>Vreme polaska</th><th>Vreme Dolaska</th><th>Slobodnih Mesta</th><th>Zauzetih Mesta</th><th>Status</th><th>Cena</th><th>Izmena</th><th>Brisanje</th></tr>"
+            prikazeniLetovi = data;
+            var status;
+
+            for (index in data) {
+
+                if (data[index]["status"] == 0) {
+                    status = "Aktivan";
+                } else if (data[index]["status"] == 1) {
+                    status = "Otkazan";
+                } else {
+                    status = "Zavrsen";
+                }
+
+                tableLetovi += "<tr><td><a href=\"Aviokompanija.html?naziv=" + data[index].nazivkompanija + "\">" + data[index].nazivkompanija + " </a></td><td>" + data[index].polaznadestinacija + "</td><td>" + data[index].odredisnadestinacija + "</td>";
+                tableLetovi += "<td>" + data[index].vremepolaska.replace("T", " ") + "</td><td>" + data[index].vremedolaska.replace("T", " ") + "</td>";
+                tableLetovi += "<td>" + data[index].slobodnihmesta + "</td><td>" + data[index].zauzetihmesta + "</td><td>" + status + "</td><td>" + data[index].cena + "</td>";
+                tableLetovi += "<td><button onclick=\"izmena(" + index + ")\">Izmeni</button></td><td><button onclick=\"brisanje(" + index + ")\">Obrisi</button></td></tr>";
+            }
+
+            $("#" + tableName).html(tableLetovi);
+        }
+
+        function brisanje(index) {
+
+            let responseObject = new Object();
+            responseObject["identificator"] = prikazeniLetovi[index].identificator;
+
+            let poruka = JSON.stringify(responseObject);
+
+            $.ajax({
+                url: "/letovi/delete",
+                type: "DELETE",
+                headers: {
+                    "authtoken": authtoken
+                },
+                data: poruka,
+                contentType: "application/json",
+                dataType: "json",
+                complete: function (data) {
+                    if (data.statusText == "OK") {
+                        location.reload();
+                    } else {
+                        alert("Ne mozete obrisati ovaj let");
+                    }                    
+                }
+            });
+        }
+
+        function izmena(index) {
+            $("#izmeniResponse").html("");
+            $("#izmenaDiv").css("visibility", "visible");
+            $("#nazivEditInput").val(prikazeniLetovi[index].nazivkompanija);
+            $("#polaznaEditInput").val(prikazeniLetovi[index].polaznadestinacija);
+            $("#odredisnaEditInput").val(prikazeniLetovi[index].odredisnadestinacija);
+            $("#datumpolaskaEditInput").val(prikazeniLetovi[index].vremepolaska);
+            $("#datumdolaskaEditInput").val(prikazeniLetovi[index].vremedolaska);
+            $("#sedisteEditInput").val(prikazeniLetovi[index].slobodnihmesta);
+                $("#cenaEditInput").val(prikazeniLetovi[index].cena);
+            if (prikazeniLetovi[index].zauzetihmesta != 0) {
+                $("#cenaEditInput").prop('disabled', true)
+            }
+            $("#idEditInput").val(prikazeniLetovi[index].identificator);
+            $("#brzauzetihEditInput").val(prikazeniLetovi[index].zauzetihmesta);
+            $("#statusEditInput").val(prikazeniLetovi[index].status);
+        }
+
+        function trueIzemna() {
+            let naziv=$("#nazivEditInput").val();
+            let polaznaDest=$("#polaznaEditInput").val();
+            let odredisnaDest=$("#odredisnaEditInput").val();
+            let datumPolaska=$("#datumpolaskaEditInput").val();
+            let datumDolaska =$("#datumdolaskaEditInput").val();
+            let brojSediste =$("#sedisteEditInput").val();
+            let cena=$("#cenaEditInput").val();
+            let ident = $("#idEditInput").val();
+            let zauzetihMesta = $("#brzauzetihEditInput").val();
+            let status;
+            let oldStatus = $("#statusEditInput").val();
+
+            if ($("#otkazivanjeEditInput").is(":checked")) {
+                status = 1;
+            } else {
+                status = oldStatus;
+            }
+
+            if (naziv.trim() == "") {
+                $("#izmeniResponse").html("Naziv ne moze da bude prazan");
+                return;
+            }
+
+            if (datumPolaska.trim() == "") {
+                $("#izmeniResponse").html("Datum polaska ne moze da bude prazan");
+                return;
+            }
+
+            if (datumDolaska.trim() == "") {
+                $("#izmeniResponse").html("Datum dolaska ne moze da bude prazan");
+                return;
+            }
+            let datum1 = new Date(datumPolaska);
+            let datum2 = new Date(datumDolaska);
+
+            if (datum1 >= datum2) {
+                $("#izmeniResponse").html("Datum dolaska mora da bude kasnije od datum polaska");
+                return;
+            }
+
+            if (status == 0) {
+                //let je aktivan, vreme polaska/dolaska ne moze da bude ranije od trenutnog vremena
+                let trenutniDatum = new Date();
+                if (datum1 < trenutniDatum) {
+                    $("#izmeniResponse").html("Let je aktivan, datum ne moze da bude ranije od trenutnog datuma");
+                    return;
+                }
+            } else if(status == 2){
+                //let je zavrsen, vreme polaska/dolaska ne moze da bude kasnije od trenutnog vremena
+                let trenutniDatum = new Date();
+                if (datum1 > trenutniDatum) {
+                    $("#izmeniResponse").html("Let je zavrsen, datum ne moze da bude kasnije od trenutnog datuma");
+                    return;
+                }
+            }
+
+            if (brojSediste.trim() == "") {
+                $("#izmeniResponse").html("Broj slobodnih mesta ne moze da bude prazan");
+                return;
+            } else if (brojSediste < 0) {
+                $("#izmeniResponse").html("Broj slobodnih mesta ne moze da bude negativan broj");
+                return;
+            } else if (brojSediste == 0) {
+                if (zauzetihMesta == 0) {
+                    $("#izmeniResponse").html("Broj slobodnih mesta ne moze da bude 0");
+                    return;
+                }
+            }
+
+            let responseObject = new Object();
+
+            responseObject["cena"] = cena;
+            responseObject["identificator"] = ident;
+            responseObject["nazivkompanija"] = naziv;
+            responseObject["odredisnadestinacija"] = odredisnaDest;
+            responseObject["polaznadestinacija"] = polaznaDest;
+            responseObject["slobodnihmesta"] = brojSediste;
+            responseObject["vremedolaska"] = datumDolaska;
+            responseObject["vremepolaska"] = datumPolaska;
+            responseObject["status"] = status;
+
+            let poruka = JSON.stringify(responseObject);
+
+            $.ajax({
+                url: "/letovi/update",
+                type: "PUT",
+                headers: {
+                    "authtoken": authtoken
+                },
+                data: poruka,
+                contentType: "application/json",
+                dataType: "json",
+                complete: function (data) {
+                    if (data.statusText == "OK") {
+                        location.reload();
+                    } else {
+                        $("#izmeniResponse").html("Something went wrong");
+                    }
+                }
+            });
+
+        }
+
+        function pretraga() {
+            let polaznaDest = $("#polaznaInput").val();
+            let odredisnaDest = $("#odredisnaInput").val();
+            let datum = $("#datumInput").val();
+
+            let listRezultati = [];
+
+            for (index in listLetova) {
+
+                if (polaznaDest.trim() != "") {
+                    if (listLetova[index].polaznadestinacija != polaznaDest) {
+                        continue;
+                    }
+                }
+
+                if (odredisnaDest.trim() != "") {
+                    if (listLetova[index].odredisnadestinacija != odredisnaDest) {
+                        continue;
+                    }
+                }
+
+                if (datum.trim() != "") {
+                    if (listLetova[index].vremepolaska.slice(0, 10) != datum) {
+                        continue;
+                    }
+                }
+
+                listRezultati.push(listLetova[index]);
+            }
+            fillTheTable("letoviTable", listRezultati);
+
+        }
+
+        function resetTable() {
+            fillTheTable("letoviTable", listLetova);
+        }
+
+        function dodajLet() {
+            let naziv = $("#nazivAddInput").val();
+            let polaznaDest = $("#polaznaAddInput").val();
+            let odredisnaDest = $("#odredisnaAddInput").val();
+            let datumPolaska = $("#datumpolaskaAddInput").val();
+            let datumDolaska = $("#datumdolaskaAddInput").val();
+            let brojMesta = $("#sedisteAddInput").val();
+            let cena = $("#cenaAddInput").val();
+            let status = $("#cenaAddInput").val();
+
+            if (naziv.trim() == "") {
+                $("#dodajResponse").html("Naziv ne moze da bude prazan");
+                return;
+            }
+
+            if (polaznaDest.trim() == "") {
+                $("#dodajResponse").html("Polazna destinacija ne moze da bude prazan");
+                return;
+            }
+
+            if (odredisnaDest.trim() == "") {
+                $("#dodajResponse").html("Odredisna destinacija ne moze da bude prazan");
+                return;
+            } else if (polaznaDest.toLowerCase() == odredisnaDest.toLowerCase()) {
+                $("#dodajResponse").html("Polazna i odredisna destinacija mora da bude razlicit");
+                return;
+            }
+
+            if (datumPolaska.trim() == "") {
+                $("#dodajResponse").html("Datum polaska ne moze da bude prazan");
+                return;
+            }
+
+            if (datumDolaska.trim() == "") {
+                $("#dodajResponse").html("Datum dolaska ne moze da bude prazan");
+                return;
+            }
+            let datum1 = new Date(datumPolaska);
+            let datum2 = new Date(datumDolaska);
+
+            if (datum1 >= datum2) {
+                $("#dodajResponse").html("Datum dolaska mora da bude kasnije od datum polaska");
+                return;
+            }
+
+            let trenutnaDatum = new Date();
+
+            if (datum1 < trenutnaDatum) {
+                $("#dodajResponse").html("Datum mora da bude kasnije od trenutnog vreme");
+                return;
+            }
+
+            if (brojMesta.trim() == "") {
+                $("#dodajResponse").html("Broj mesta ne moze da bude prazan");
+                return;
+            } else if (brojMesta <= 0) {
+                $("#dodajResponse").html("Broj mesta mora da bude veci od 0");
+                return;            
+            }
+
+            if (cena.trim() == "") {
+                $("#dodajResponse").html("Cena ne moze da bude prazan");
+                return;
+            } else if (cena <= 0) {
+                $("#dodajResponse").html("Cena mora da bude veci od 0");
+                return;
+            }
+
+            let responseObject = new Object();
+
+            responseObject["cena"] = cena;
+            responseObject["nazivkompanija"] = naziv;
+            responseObject["odredisnadestinacija"] = odredisnaDest;
+            responseObject["polaznadestinacija"] = polaznaDest;
+            responseObject["slobodnihmesta"] = brojMesta;
+            responseObject["vremedolaska"] = datumDolaska;
+            responseObject["vremepolaska"] = datumPolaska;
+
+            let poruka = JSON.stringify(responseObject);
+
+            $.ajax({
+                url: "/letovi/add",
+                type: "POST",
+                headers: {
+                    "authtoken": authtoken
+                },
+                data: poruka,
+                contentType: "application/json",
+                dataType: "json",
+                complete: function (data) {
+                    if (data.statusText == "OK") {
+                        location.reload();
+                    } else {
+                        $("#dodajResponse").html("Something went wrong"); 
+                    }
+                }
+            });
+
+        }
+    </script>
+
+</head>
+<body>
+    <div class="menubar">
+        <ul class="menulist">
+            <li>
+                <a class="menuitem" href="/HtmlPages/Index.html">Početna Stranica</a>
+            </li>
+        </ul>
+    </div>
+    <h1>Letovi</h1>
+    <div id="letoviDiv">
+        <table id="letoviTable">
+        </table>
+
+        <h1>Pretraga letovi</h1>
+        <div id="pretragaTabela">
+            <table style="margin-left: auto; margin-right: auto; margin-bottom: 20px; border: 0px; ">
+                <tr><th>Polazna destinacija</th> <td style="border:0px;"> <input type="text" id="polaznaInput" /></td></tr>
+                <tr><th>Odredisna destinacija</th> <td style="border:0px;"> <input type="text" id="odredisnaInput" /></td></tr>
+                <tr><th>Datum polaska</th> <td style="border:0px;"> <input type="date" id="datumInput" /></td></tr>
+                <tr><td style="border:0px;" colspan="2"><button onclick="pretraga()" style="width:150px; font-size:20px;">Pretraga</button></td></tr>
+                <tr><td style="border:0px;" colspan="2"><button style="width:150px; font-size:20px;" onclick="resetTable()">Reset</button></td></tr>
+            </table>
+            <h3 id="pretragaResponse"></h3>
+        </div>
+
+    </div>
+
+    <div id="dodavanjeDiv">
+        <h1>Dodvanje leta</h1>
+        <table style="border:0px;">
+            <tr><th>Naziv Aviokompanije</th><td><input type="text" id="nazivAddInput" /></td></tr>
+            <tr><th>Polazna Destinacija</th><td><input type="text" id="polaznaAddInput" /></td></tr>
+            <tr><th>Odredisna Destinacija</th><td><input type="text" id="odredisnaAddInput" /></td></tr>
+            <tr><th>Datum Polaska</th><td><input type="datetime-local" id="datumpolaskaAddInput" /></td></tr>
+            <tr><th>Datum Dolaska</th><td><input type="datetime-local" id="datumdolaskaAddInput" /></td></tr>
+            <tr><th>Broj mesta</th><td><input type="number" id="sedisteAddInput" /></td></tr>
+            <tr><th>Cena</th><td><input type="number" id="cenaAddInput" /></td></tr>
+            <tr><td colspan="2" style="border:0px;"><button style="width:150px; font-size:20px;" onclick="dodajLet()">Kreiraj</button></td></tr>
+        </table>
+        <h3 id="dodajResponse"></h3>
+    </div>
+
+    <div id="izmenaDiv" style="visibility:collapse">
+        <h1 id="izmeniHeader">Izmena leta</h1>
+        <table style="border:0px;">
+            <tr><th>Naziv Aviokompanije</th><td><input type="text" id="nazivEditInput" /></td></tr>
+            <tr><th>Polazna Destinacija</th><td><input disabled type="text" id="polaznaEditInput" /></td></tr>
+            <tr><th>Odredisna Destinacija</th><td><input disabled type="text" id="odredisnaEditInput" /></td></tr>
+            <tr><th>Datum Polaska</th><td><input type="datetime-local" id="datumpolaskaEditInput" /></td></tr>
+            <tr><th>Datum Dolaska</th><td><input type="datetime-local" id="datumdolaskaEditInput" /></td></tr>
+            <tr><th>Broj slobodnih mesta</th><td><input type="number" id="sedisteEditInput" /></td></tr>
+            <tr><th>Cena</th><td><input type="number" id="cenaEditInput" /></td></tr>
+            <tr><th>Otkazivanje</th><td><input type="checkbox" id="otkazivanjeEditInput" /></td></tr>
+            <tr style="visibility:collapse"><th>Id</th><td><input disabled type="text" id="idEditInput" /></td></tr>
+            <tr style="visibility:collapse"><th>br Zauzetih</th><td><input disabled type="number" id="brzauzetihEditInput" /></td></tr>
+            <tr style="visibility:collapse"><th>status</th><td><input disabled type="text" id="statusEditInput" /></td></tr>
+            <tr><td colspan="2" style="border:0px;"><button style="width:150px; font-size:20px;" onclick="trueIzemna()">Izmeni</button></td></tr>
+        </table>
+        <h3 id="izmeniResponse"></h3>
+    </div>
+</body>
+</html>

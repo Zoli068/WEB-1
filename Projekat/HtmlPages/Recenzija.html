@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" lang="en" />
+    <title>Recenzija</title>
+    <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
+    <script src="/Scripts/jquery-3.4.1.js"></script>
+    <script>
+
+        var authtoken = sessionStorage.getItem("authtoken");
+        var listRezervacija;
+        var listLetovi;
+        var idLeta;
+
+        $(document).ready(function () {
+
+            if (authtoken == null) {
+                authtoken = "";
+            }
+
+            $.ajax({
+                url: "/checklogin",
+                type: "GET",
+                headers: {
+                    "authtoken": authtoken
+                },
+                complete: function (data) {
+                    if (data.statusText != "OK") {
+                        $(location).prop('href', '/HtmlPages/Index.html');
+                    } else if (data.responseJSON.tipKorisnik == 1) {
+                        $(location).prop('href', '/HtmlPages/Index.html');
+                    }
+                }
+            });
+
+            let searchParam = new URLSearchParams(window.location.search);
+
+            if (searchParam.has('id')) {
+                idLeta = searchParam.get('id');
+                if (idLeta == "") {
+                    $(location).prop('href', '/HtmlPages/Index.html');
+                }
+            }
+            else {
+            }
+
+            $.ajax({
+                url: "/recenzija/postoji?id=" + idLeta,
+                type: "GET",
+                headers: {
+                    "authtoken": authtoken
+                },
+                complete: function (data) {
+                    if (data.responseJSON == "Nepostoji") {
+
+                    } else if (data.statusText == "OK") {
+                        $("#naslovSite").html("Recenzija");
+                        $("#kreiranjeRecenzija").remove();
+                        $("#infoRecenzija").css("visibility", "visible");
+
+                        $('#naslovTable').html(data.responseJSON["naslov"]);
+                        $('#sadrzajTable').html(data.responseJSON["sadrzaj"]);
+                        let statusRecenzija;
+
+                        if (data.responseJSON.status == 0) {
+                            statusRecenzija = "Kreirana";
+                        } else if (data.responseJSON.status == 1) {
+                            statusRecenzija = "Odobrena";
+                        } else {
+                            statusRecenzija = "Odbijena";
+                        }
+                        $('#statusTable').html(statusRecenzija);
+
+                        if (data.responseJSON.putanjaslike == null || data.responseJSON.putanjaslike=="") {
+                            $("#slikaPrikaz").attr("visibility","hidden");
+                            $("#slikaPrikaz").remove();
+                            $("#slikaHeader").remove();
+                            $("#slikaKolona").remove();
+                        } else {
+                            $('#slikaPrikaz').attr("src", "/Images/" + data.responseJSON.putanjaslike);
+                        }
+
+                    } else {
+                        $(location).prop('href', '/HtmlPages/Index.html');
+                    }
+                }
+            });
+
+        });
+
+        function letInformacija() {
+            $(location).prop('href', '/HtmlPages/Let.html?id=' + idLeta);
+        }
+
+        function send() {
+            let naslov = $("#naslovRecenzije").val();
+            let sadrzaj = $("#sadrzajRecenzije").val();
+            let slika = $("#slikaRecenzije").val();
+
+            let ekstenzije = [".jpg", ".jpeg", '.png'];
+
+            let okFormat = false;
+
+            for (index in ekstenzije) {
+                if (slika.includes(ekstenzije[index])) {
+                    okFormat = true;
+                    break;
+                }
+            }
+
+            if (naslov == "") {
+                $("#responseMessage").html("Naslov ne moze da bude prazan");
+                return;
+            }
+
+            if (sadrzaj == "") {
+                $("#responseMessage").html("Sadrzaj ne moze da bude prazan");
+                return;
+            }
+
+            if (okFormat == false && slika != "") {
+                $("#responseMessage").html("Invalid format za sliku");
+                return;
+            }
+
+            var file = document.getElementById("slikaRecenzije");
+
+            if (file.files.length > 0) {
+                if (file.files[0].size > 1048576) {
+                    $("#responseMessage").html("Slika max size is 1MB");
+                    return;
+                }
+            }
+
+            if (slika != "") {
+
+                var reader = new FileReader();
+                reader.addEventListener("loadend", () => {
+
+                    var kodedSlika = reader.result.replace("data:", "").replace(/^.+,/, "");
+
+                    var porukaObject = new Object();
+                    porukaObject["idleta"] = idLeta;
+                    porukaObject["naslov"] = naslov;
+                    porukaObject["sadrzaj"] = sadrzaj;
+                    porukaObject["slika"] = kodedSlika;
+
+                    var poruka = JSON.stringify(porukaObject);
+                    $.ajax({
+                        url: '/recenzija/posalji',
+                        type: 'POST',
+                        headers: {
+                            "authtoken": authtoken
+                        },
+                        data: poruka,
+                        contentType: "application/json",
+                        dataType: "json",
+                        complete: function (data) {
+                            location.reload();
+                        }
+                    })
+
+
+                })
+
+                reader.readAsDataURL(file.files[0]);
+            } else {
+                var porukaObject = new Object();
+                porukaObject["idleta"] = idLeta;
+                porukaObject["naslov"] = naslov;
+                porukaObject["sadrzaj"] = sadrzaj;
+
+                var poruka = JSON.stringify(porukaObject);
+                $.ajax({
+                    url: '/recenzija/posalji',
+                    type: 'POST',
+                    headers: {
+                        "authtoken": authtoken
+                    },
+                    data: poruka,
+                    contentType: "application/json",
+                    dataType: "json",
+                    complete: function (data) {
+                        location.reload();
+                    }
+                });
+
+            }
+
+
+        }
+
+        
+    </script>
+</head >
+<body>
+    <div class="menubar">
+        <ul class="menulist">
+            <li>
+                <a class="menuitem" href="/HtmlPages/Index.html">Početna Stranica</a>
+            </li>
+        </ul>
+    </div>
+    <h1 id="naslovSite">Kreiranje recenziju</h1>
+
+    <div id="kreiranjeRecenzija">
+
+        <table style="border:0px;">
+            <tr> <th>Naslov</th></tr>
+            <tr><td> <input id="naslovRecenzije" type="text" /></td></tr>
+            <tr><th>Sadrzaj</th></tr>
+            <tr><td><input id="sadrzajRecenzije" type="text" /></td></tr>
+            <tr><th>Slika</th></tr>
+            <tr><td><input id="slikaRecenzije" type="file" /></td></tr>
+            <tr><th ><a onclick="letInformacija()" style="text-decoration:underline;">Vise informacije o letu</a></th></tr>
+            <tr style="text-align:center;"><td><button onclick="send()">Posalji</button></td></tr>
+        </table>
+        <h3 id="responseMessage"></h3>
+    </div>
+    <div id="infoRecenzija" style="visibility:hidden;">
+        <table style="border:0px;">
+            <tr><th>Naslov</th></tr>
+            <tr><td id="naslovTable"></td></tr>
+            <tr><th>Sadrzaj</th></tr>
+            <tr><td id="sadrzajTable"></td></tr>
+            <tr><th>Status</th></tr>
+            <tr><td id="statusTable"></td></tr>
+            <tr><th ><a onclick="letInformacija()" style="text-decoration:underline;">Vise informacije o letu</a></th></tr>
+            <tr><th id="slikaHeader">Slika</th></tr>
+
+        <tr><td id="slikaKolona"><img width="400" id="slikaPrikaz" /></td></tr>
+        </table>
+    </div>
+</body>
+</html >
+
+

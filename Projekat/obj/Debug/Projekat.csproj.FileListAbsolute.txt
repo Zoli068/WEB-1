@@ -1,0 +1,192 @@
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\Projekat.dll.config
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\Projekat.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\Projekat.pdb
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\csc.exe
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\csc.exe.config
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\csc.rsp
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\csi.exe
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\csi.exe.config
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\csi.rsp
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\Microsoft.Managed.Core.targets
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\Microsoft.VisualBasic.Core.targets
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\Microsoft.Win32.Primitives.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.AppContext.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Collections.Immutable.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Console.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Diagnostics.DiagnosticSource.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Diagnostics.StackTrace.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Globalization.Calendars.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.IO.Compression.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.IO.Compression.ZipFile.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.IO.FileSystem.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.IO.FileSystem.Primitives.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Net.Http.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Net.Sockets.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Reflection.Metadata.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Runtime.InteropServices.RuntimeInformation.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Security.Cryptography.Algorithms.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Security.Cryptography.Encoding.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Security.Cryptography.Primitives.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Text.Encoding.CodePages.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Threading.Tasks.Extensions.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.ValueTuple.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Xml.ReaderWriter.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Xml.XmlDocument.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Xml.XPath.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\System.Xml.XPath.XDocument.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\vbc.exe
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\vbc.exe.config
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\vbc.rsp
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\VBCSCompiler.exe
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\roslyn\VBCSCompiler.exe.config
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\Antlr3.Runtime.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\Microsoft.Web.Infrastructure.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\Newtonsoft.Json.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Net.Http.Formatting.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Web.Helpers.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Web.Http.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Web.Http.WebHost.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Web.Mvc.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Web.Optimization.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Web.Razor.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Web.WebPages.Deployment.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Web.WebPages.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Web.WebPages.Razor.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\WebGrease.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\Newtonsoft.Json.xml
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Net.Http.Formatting.xml
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Web.Helpers.xml
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Web.Http.xml
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Web.Http.WebHost.xml
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Web.Mvc.xml
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Web.Optimization.xml
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Web.Razor.xml
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Web.WebPages.xml
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Web.WebPages.Deployment.xml
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\System.Web.WebPages.Razor.xml
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\Antlr3.Runtime.pdb
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\obj\Debug\Projekat.csproj.AssemblyReference.cache
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\obj\Debug\Projekat.csproj.CoreCompileInputs.cache
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\obj\Debug\Projekat.csproj.Up2Date
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\obj\Debug\Projekat.dll
+D:\Fakultet\III godina\web prog u inf sis\Projekat\Projekat\Projekat\obj\Debug\Projekat.pdb
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\Projekat.dll.config
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\Projekat.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\Projekat.pdb
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\csc.exe
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\csc.exe.config
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\csc.rsp
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\csi.exe
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\csi.exe.config
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\csi.rsp
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\Microsoft.Managed.Core.targets
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\Microsoft.VisualBasic.Core.targets
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\Microsoft.Win32.Primitives.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.AppContext.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Collections.Immutable.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Console.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Diagnostics.DiagnosticSource.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Diagnostics.StackTrace.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Globalization.Calendars.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.IO.Compression.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.IO.Compression.ZipFile.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.IO.FileSystem.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.IO.FileSystem.Primitives.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Net.Http.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Net.Sockets.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Reflection.Metadata.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Runtime.InteropServices.RuntimeInformation.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Security.Cryptography.Algorithms.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Security.Cryptography.Encoding.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Security.Cryptography.Primitives.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Text.Encoding.CodePages.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Threading.Tasks.Extensions.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.ValueTuple.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Xml.ReaderWriter.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Xml.XmlDocument.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Xml.XPath.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\System.Xml.XPath.XDocument.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\vbc.exe
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\vbc.exe.config
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\vbc.rsp
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\VBCSCompiler.exe
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\roslyn\VBCSCompiler.exe.config
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\Antlr3.Runtime.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\Microsoft.AspNetCore.Http.Features.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\Microsoft.Extensions.Primitives.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\Microsoft.Web.Infrastructure.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\Newtonsoft.Json.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Buffers.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.IO.Pipelines.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Memory.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Net.Http.Formatting.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Numerics.Vectors.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Runtime.CompilerServices.Unsafe.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Threading.Tasks.Extensions.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Web.Helpers.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Web.Http.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Web.Http.WebHost.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Web.Mvc.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Web.Optimization.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Web.Razor.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Web.WebPages.Deployment.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Web.WebPages.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Web.WebPages.Razor.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\WebGrease.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\Microsoft.AspNetCore.Http.Features.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\Microsoft.Extensions.Primitives.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Buffers.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.IO.Pipelines.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Memory.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Numerics.Vectors.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Runtime.CompilerServices.Unsafe.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Threading.Tasks.Extensions.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\Newtonsoft.Json.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Net.Http.Formatting.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Web.Helpers.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Web.Http.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Web.Http.WebHost.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Web.Mvc.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Web.Optimization.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Web.Razor.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Web.WebPages.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Web.WebPages.Deployment.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Web.WebPages.Razor.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\Antlr3.Runtime.pdb
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\obj\Debug\Projekat.csproj.AssemblyReference.cache
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\obj\Debug\Projekat.csproj.CoreCompileInputs.cache
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\obj\Debug\Projekat.csproj.Up2Date
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\obj\Debug\Projekat.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\obj\Debug\Projekat.pdb
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\Microsoft.Bcl.AsyncInterfaces.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Text.Encodings.Web.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.ValueTuple.dll
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\Microsoft.Bcl.AsyncInterfaces.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.Text.Encodings.Web.xml
+D:\Fakultet\III godina\web prog u inf sis\Veb Projekat\Projekat\Projekat\bin\System.ValueTuple.xml

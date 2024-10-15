@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Let</title>
+    <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
+    <script src="/Scripts/jquery-3.4.1.js"></script>
+    <style>
+        table {
+            border: 0px;
+        }
+
+        tr {
+            height: 60px;
+        }
+
+        th {
+            font-size: 25px;
+        }
+    </style>
+    <script>
+
+        $(document).ready(function () {
+
+            let idLet;
+            let searchParam = new URLSearchParams(window.location.search);
+
+            if (searchParam.has('id')){
+
+                idLet = searchParam.get('id');
+
+                $.get('/letovi/getbyid?id=' + idLet + '', function (data, status) {
+
+                    if (data == null) {
+                        let errorInfo = "<h1>Ne postoji Let sa id-om: " + idLet + "</h1>";
+                        $('#tablemesto').html(errorInfo);
+                        return;
+                    }
+
+                    let statusEnum;
+
+                    if (data["status"] == 0) {
+                        statusEnum = "Aktivan";
+                    } else if (data["status"] == 1) {
+                        statusEnum = "Otkazan";
+                    } else {
+                        statusEnum = "Zavrsen";
+                    }
+
+                    document.title = data.nazivkompanija;
+
+                    let kompanijaInfo = "<h1>Osnovne informacije</h1>";
+                    kompanijaInfo += "<table id=\"letovi\"><tr><th>Kompanija</th>";
+                    kompanijaInfo += "<td><a href=\"/HtmlPages/Aviokompanija.html?naziv=" + data.nazivkompanija + "\">" + data.nazivkompanija + "</a></td></tr>"
+                    kompanijaInfo += "<tr><th>Odredista</th>";
+                    kompanijaInfo += "<td>" + data.odredisnadestinacija + "</td></tr>";
+                    kompanijaInfo += "<tr><th>Polazna</th>";
+                    kompanijaInfo += "<td>" + data.polaznadestinacija + "</td></tr>";
+                    kompanijaInfo += "<tr><th>Slobodnih mesta</th>";
+                    kompanijaInfo += "<td>" + data.slobodnihmesta + "</td></tr>";
+                    kompanijaInfo += "<tr><th>Zauzetih mesta</th>";
+                    kompanijaInfo += "<td>"+data.zauzetihmesta + "</td></tr>";
+                    kompanijaInfo += "<tr><th>Vreme Polaska</th>";
+                    kompanijaInfo += "<td>"+data.vremepolaska.replace("T"," ")+ "</td></tr>";
+                    kompanijaInfo += "<tr><th>Vreme Dolaska</th>";
+                    kompanijaInfo += "<td>" + data.vremedolaska.replace("T", " ") + "</td></tr>";
+                    kompanijaInfo += "<tr><th>Status</th>";
+                    kompanijaInfo += "<td>" + statusEnum + "</td></tr>";
+                    kompanijaInfo += "</table>";
+
+                    $('#tablemesto').html(kompanijaInfo);
+                });
+
+            }
+            else {
+                $(location).prop('href', '/HtmlPages/Index.html');
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="menubar">
+        <ul class="menulist">
+            <li>
+                <a class="menuitem" href="/HtmlPages/Index.html">Početna Stranica</a>
+            </li>
+        </ul>
+    </div>
+    <div id="tablemesto"></div>
+</body>
+</html>

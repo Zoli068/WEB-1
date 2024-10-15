@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" lang="en" />
+    <title>Moji letovi</title>
+    <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
+    <script src="/Scripts/jquery-3.4.1.js"></script>
+    <script>
+
+        var authtoken = sessionStorage.getItem("authtoken");
+        var listLetova;
+
+        $(document).ready(function () {
+
+            if (authtoken == null) {
+                authtoken = "";
+            }
+
+            $.ajax({
+                url: "/checklogin",
+                type: "GET",
+                headers: {
+                    "authtoken": authtoken
+                },
+                complete: function (data) {
+                    if (data.statusText != "OK") {
+                        $(location).prop('href', '/HtmlPages/Index.html');
+                    } else if (data.responseJSON.tipKorisnik == 1) {
+                        $(location).prop('href', '/HtmlPages/Index.html');
+                    }
+                }
+            });
+
+            $.ajax({
+                url: '/letovi/userletovi',
+                type: "GET",
+                headers: {
+                    "authtoken": authtoken
+                },
+                complete: function (data) {
+
+                    if (data.status == 200) {
+
+                    listLetova = data.responseJSON;
+
+                    fillTheTable("letovitable", data.responseJSON);
+
+                    $("#filtriranje").css("visibility", "visible");
+                        $("#letovitable").css("visibility", "visible");
+
+                    }
+                }
+            });
+        });
+
+        function fillTheTable(tableName, data) {
+
+            let tableLetovi = "<tr><th>Aviokompanija</th><th>Polazak</th><th>Odredista</th><th>Vreme polaska</th><th>Vreme Dolaska</th><th>Slobodnih Mesta</th><th>Zauzetih Mesta</th><th>Status</th><th style=\"min-width:120px;\" >Cena<button onclick=\"sortirajTabelu(false,'" + tableName + "')\" style=\"font-size:13px;margin-left:10px;\">&#8593;</button><button onclick=\"sortirajTabelu(true,'" + tableName + "')\" style=\"font-size:13px;font-weight:bold;margin-left:5px;\">&#8595;</button></th></tr>"
+
+            var status;
+
+            for (index in data) {
+
+                if (data[index]["status"] == 0) {
+                    status = "Aktivan";
+                } else if (data[index]["status"] == 1) {
+                    status = "Otkazan";
+                } else {
+                    status = "Zavrsen";
+                }
+
+                tableLetovi += "<tr><td><a href=\"Aviokompanija.html?naziv=" + data[index].nazivkompanija + "\">" + data[index].nazivkompanija + " </a></td><td>" + data[index].polaznadestinacija + "</td><td>" + data[index].odredisnadestinacija + "</td>";
+                tableLetovi += "<td>" + data[index].vremepolaska.replace("T", " ") + "</td><td>" + data[index].vremedolaska.replace("T", " ") + "</td>";
+                tableLetovi += "<td>" + data[index].slobodnihmesta + "</td><td>" + data[index].zauzetihmesta + "</td><td>" + status+"</td><td>" + data[index].cena + "</td></tr>";
+            }
+
+            $("#" + tableName).html(tableLetovi);
+        }
+
+        function pretraga() {
+            let status=$("#statusInput").val();
+            let statusEnum;
+
+            if (status == "Aktivan") {
+                statusEnum = 0;
+            } else if (status == "Otkazan") {
+                statusEnum = 1;
+            } else {
+                statusEnum = 2;
+            }
+
+            let tempList = [];
+            for (index in listLetova) {
+                if (listLetova[index]["status"] == statusEnum) {
+                    tempList.push(listLetova[index]);
+                }
+            }
+
+            fillTheTable("letovitable", tempList);
+        }
+
+        function reset() {
+            fillTheTable("letovitable", listLetova);
+        }
+    </script>
+</head>
+<body>
+    <div class="menubar">
+        <ul class="menulist">
+            <li>
+                <a class="menuitem" href="/HtmlPages/Index.html">Početna Stranica</a>
+            </li>
+        </ul>
+    </div>
+    <h1>Moji letovi</h1>
+    <div>
+        <table style="visibility:hidden;" id="letovitable"></table>
+    </div>
+    <div id="filtriranje" style="visibility:hidden;">
+        <h1> Opcije za pretragu</h1>
+        <table style="margin-left: auto; margin-right: auto; margin-bottom: 20px; border: 0px; ">
+            <tr>
+                <th>Status</th>
+                <td style="border:0px;">
+                    <select id="statusInput">
+                        <option>Aktivan</option>
+                        <option>Otkazan</option>
+                        <option>Zavrsen</option>
+                    </select>
+                </td>
+            </tr>
+            <tr><td style="border:0px;" colspan="2"><button onclick="pretraga()" style="width:150px; font-size:20px;">Pretraga</button></td></tr>
+            <tr><td style="border:0px;" colspan="2"><button onclick="reset()" style="width:150px; font-size:20px;">Reset</button></td></tr>
+        </table>
+        <div style="margin-left:auto; margin-right:auto;" id="porukaPretrage"></div>
+    </div>
+</body>
+</html>

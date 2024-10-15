@@ -1,0 +1,262 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" lang="en" />
+    <title>Početna Stranica</title>
+    <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
+    <script src="/Scripts/jquery-3.4.1.js"></script>
+    <script>
+
+        var listLetova;
+        var listKompanije;
+        var authtoken = sessionStorage.getItem("authtoken");
+
+        function logout() {
+
+            $.ajax({
+                url: "/logout",
+                type: "GET",
+                headers: {
+                    "authtoken": authtoken
+                },
+                complete: function (data) {
+                    sessionStorage.setItem("authtoken", "");
+                    location.reload();
+                }
+            });
+        }
+
+        $(document).ready(function () {
+
+            if (authtoken == null) {
+                authtoken = "";
+            }
+
+            $.ajax({
+                url:'/letovi/get?status=0',
+                type:"GET",
+                headers: {
+                    "authtoken": authtoken
+                },
+                complete: function (data) {
+
+                    listLetova = data.responseJSON;
+
+                    fillTheTable("letovitable", data.responseJSON);
+
+                    $("#filtriranje").css("visibility", "visible");
+                    $("#letovitable").css("visibility", "visible");
+                }
+            });
+
+            $.ajax({
+                url:'/aviokompanija',
+                type:"GET",
+                headers: {
+                    "authtoken": authtoken
+                },
+                complete: function (data) {
+
+                    listKompanije = data.responseJSON;
+                    fillTheKompanijeTable(listKompanije);
+                }
+            });
+
+            $.ajax({
+                url: "/checklogin",
+                type: "GET",
+                headers: {
+                    "authtoken": authtoken
+                },
+                complete: function (data) {
+                    if (data.statusText == "OK") {
+
+                        $("#loginSection").html("<a class=\"menuitem\" href=\"/HtmlPages/MojProfil.html\">Moj Profil</a> <a onclick=\"logout()\" class= \"menuitem\"> Log out</a> ");
+
+                        if (data.responseJSON["tipKorisnika"] == 0) {
+                            $("#menuSection").css("visibility", "visible");
+                            $("#menuSection").html("<a class=\"menuitem\"/a><a class=\"menuitem\" href=\"/HtmlPages/SviLetova.html\">Svih Letova</a> <a class=\"menuitem\" href=\"/HtmlPages/Rezervacije.html\">Rezervacije</a> ");
+                        } else if (data.responseJSON["tipKorisnika"] == 1)
+                        {
+                            $("#menuSection").css("visibility", "visible");
+                            $("#menuSection").html("<a class=\"menuitem\"/a><a class=\"menuitem\" href=\"/HtmlPages/AdministracijaKompanije.html\">Aviokompanije</a><a class=\"menuitem\"/a><a class=\"menuitem\" href=\"/HtmlPages/AdministracijaLetovi.html\">Letovi</a><a class=\"menuitem\" href=\"/HtmlPages/AdministracijaRezervacije.html\">Rezervacije</a><a class=\"menuitem\" href=\"/HtmlPages/AdministracijaRecenzije.html\">Recenzije</a>");
+                        }
+                    }
+
+                    $("#loginSection").css("visibility", "visible");
+                }
+            });
+        })
+
+        function fillTheKompanijeTable(data) {
+            listPrikazenKompanije = data;
+            let tableRezervacije = "<tr><th>Naziv</th><th>Adresa</th><th>Kontakt Informacije</th></tr>"
+            var status;
+
+            for (index in data) {
+
+                tableRezervacije += "<tr><td><a href=\"/HtmlPages/Aviokompanija.html?naziv=" + data[index].naziv + "\">" + data[index].naziv + "</a.</td><td>" + data[index].adresa + "</td><td>" + data[index].kontaktinformacije + "</td></tr>";
+            }
+            $("#aviokompanijaTable").html(tableRezervacije);
+        }
+
+        function sortirajTabelu(vrsta_sort,idTabelu) {
+            let letoviRedovi = $('#' + idTabelu +' tr td:last-child');
+            let letoviTablicaChildrens = $('#' + idTabelu ).children();
+            let i, j, swapIndex;
+            
+            for (i = 0; i < letoviRedovi.length - 1; i++) {
+
+                swapIndex = i;
+                letoviRedovi = $('#' + idTabelu +' tr td:last-child');
+
+                for (j = i + 1; j < letoviRedovi.length; j++) {
+
+                    if (vrsta_sort == true) {
+
+                        if (parseInt(letoviRedovi[j].innerHTML) < parseInt(letoviRedovi[swapIndex].innerHTML)) {
+                            swapIndex = j;
+                        }
+                    }
+                    else {
+
+                        if (parseInt(letoviRedovi[j].innerHTML) > parseInt(letoviRedovi[swapIndex].innerHTML)) {
+                            swapIndex = j;
+                        }
+                    }
+                }
+
+                let pom = i + 1;
+                swapIndex++;
+
+                if (swapIndex != pom) {
+                    let firstRed = letoviTablicaChildrens[pom].innerHTML;
+                    let secondRed = letoviTablicaChildrens[swapIndex].innerHTML;
+                    letoviTablicaChildrens[swapIndex].innerHTML = firstRed;
+                    letoviTablicaChildrens[pom].innerHTML = secondRed;
+                }
+            }
+        }
+
+        function fillTheTable(tableName, data) {
+
+            let tableLetovi = "<tr><th>Aviokompanija</th><th>Polazak</th><th>Odredista</th><th>Vreme polaska</th><th>Vreme Dolaska</th><th>Slobodnih Mesta</th><th>Zauzetih Mesta</th><th style=\"min-width:120px;\" >Cena<button onclick=\"sortirajTabelu(false,'" + tableName + "')\" style=\"font-size:13px;margin-left:10px;\">&#8593;</button><button onclick=\"sortirajTabelu(true,'"+tableName+"')\" style=\"font-size:13px;font-weight:bold;margin-left:5px;\">&#8595;</button></th></tr>"
+
+            for (index in data) {
+                tableLetovi += "<tr><td><a href=\"Aviokompanija.html?naziv=" + data[index].nazivkompanija + "\">" + data[index].nazivkompanija + " </a></td><td>" + data[index].polaznadestinacija + "</td><td>" + data[index].odredisnadestinacija + "</td>";
+                tableLetovi += "<td>" + data[index].vremepolaska.replace("T", " ") + "</td><td>" + data[index].vremedolaska.replace("T", " ") + "</td>";
+                tableLetovi += "<td>" + data[index].slobodnihmesta + "</td><td>" + data[index].zauzetihmesta + "</td><td>" + data[index].cena + "</td></tr>";
+            }
+
+            $("#"+tableName).html(tableLetovi);
+        }
+
+        function pretraga() {
+            let aviokompanija = $('#aviokompanijaInput').val();
+            let polazna = $('#polaznaInput').val();
+            let odredista = $('#odredistaInput').val();
+            let datumPolaska = $('#polaskaInput').val();
+            let datumDolaska = $('#dolaskaInput').val();
+
+            let listIndexi = [];
+            let listRezultati = [];
+
+            if (aviokompanija.trim() == "" && polazna.trim() == "" && odredista.trim() == "" && datumDolaska.trim() == "" && datumPolaska.trim() == "") {
+                $("#porukaPretrage").html("<h3>Izaberite neki uslov za pretragu!</h3>");
+                return;
+            }
+
+            $("#pretragatable").css("visibility", "visible");
+
+            for (index in listLetova) {
+
+                if (aviokompanija != "") {
+                    if (listLetova[index].nazivkompanija.toLowerCase() != aviokompanija.toLowerCase()) {
+                        continue;
+                    }
+                }
+
+                if (odredista != "") {
+                    if (listLetova[index].odredisnadestinacija.toLowerCase()!=odredista.toLowerCase()) {
+                        continue;
+                    }
+                }
+
+                if (polazna != "") {
+                    if (listLetova[index].polaznadestinacija.toLowerCase() !=polazna.toLowerCase()) {
+                        continue;
+                    }
+                }
+
+                if (datumDolaska != "") {
+                    if (listLetova[index].vremedolaska.slice(0, 10) != datumDolaska){
+                        continue;
+                    }
+                }
+
+                if (datumPolaska != "") {
+                    if (listLetova[index].vremepolaska.slice(0, 10) != datumPolaska){
+                        continue;
+                    }
+                }
+
+                listIndexi.push(index);
+            }
+
+            for (index in listIndexi) {
+                listRezultati.push(listLetova[listIndexi[index]]);
+            }
+
+            if (listRezultati.length > 0) {
+
+                fillTheTable("pretragatable", listRezultati);
+
+                $("#porukaPretrage").html("<h3>Broj odgovarajuci letova: " + listRezultati.length + "</h3>");
+                $("#pretragatable").css("visibility", "visible");
+            }
+            else {
+                $("#pretragatable").css("visibility", "hidden");
+                $("#porukaPretrage").html("<h3>Ne postoji ni jedan let koji ispuni sve uslove</h3>");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="menubar">
+        <ul class="menulist">
+            <li style="visibility:hidden" id="menuSection">
+            </li>
+            <li style="visibility:hidden;" id="loginSection">
+                <a class="menuitem" href="/HtmlPages/Signup.html">Sign Up</a>
+                <a class="menuitem" href="/HtmlPages/Login.html">Login</a>
+            </li>
+        </ul>
+    </div>
+    <h1>Aktivni letovi</h1>
+    <div>
+        <table style="visibility:hidden;" id="letovitable"></table>
+    </div>
+    <div id="filtriranje" style="visibility:hidden;">
+        <h1> Opcije za pretragu</h1>
+
+        <table style="margin-left: auto; margin-right: auto; margin-bottom: 20px; border: 0px; ">
+            <tr><th>Aviokompanija</th> <td style="border:0px;"> <input type="text" id="aviokompanijaInput" /></td></tr>
+            <tr><th>Polazna</th> <td style="border:0px;"> <input type="text" id="polaznaInput" /></td></tr>
+            <tr><th>Odredista</th> <td style="border:0px;"> <input type="text" id="odredistaInput" /></td></tr>
+            <tr><th>Datum Polaska</th> <td style="border:0px;"> <input type="date" id="polaskaInput" /></td></tr>
+            <tr><th>Datum Dolaska</th> <td style="border:0px;"> <input type="date" id="dolaskaInput" /></td></tr>
+            <tr><td style="border:0px;" colspan="2"><button onclick="pretraga()" style="width:150px; font-size:20px;">Pretraga</button></td></tr>
+        </table>
+
+        <div style="margin-left:auto; margin-right:auto;" id="porukaPretrage"></div>
+        <table style="visibility:hidden;" id="pretragatable"></table>
+    </div>
+
+    <div id="aviokompanijeTable">
+        <h1>Svih AvioKompanija</h1>
+        <table id="aviokompanijaTable">
+        </table>
+    </div>
+</body>
+</html>

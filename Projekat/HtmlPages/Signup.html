@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" lang="en" />
+    <title>Registration</title>
+    <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
+    <script src="/Scripts/jquery-3.4.1.js"></script>
+    <script>
+
+        var authtoken = sessionStorage.getItem("authtoken");
+
+        $(document).ready(function () {
+
+            if (authtoken == null) {
+                authtoken = "";
+            }
+
+            $.ajax({
+                url: "/checklogin",
+                type: "GET",
+                headers: {
+                    "authtoken": authtoken
+                },
+                complete: function (data) {
+                    if (data.statusText == "OK") {
+                        $(location).prop('href', '/HtmlPages/Index.html');
+                    }
+                }
+            });
+        });
+
+        function register() {
+
+            let ime = $("#ime").val();
+            let prezime = $("#prezime").val();
+            let email = $("#email").val();
+            let datumrodjenja = $("#datumrodjenja").val();
+            let korisnickoime = $("#korisnickoime").val();
+            let lozinka = $("#lozinka").val();
+            let pol = $("#pol").val();
+
+            $("#registerResponse").css("visibility", "hidden");
+
+            if (ime == "" || prezime == "" || email == "" || datumrodjenja == "" || korisnickoime == "" || lozinka==""||pol=="") {
+                $("#registerResponse").html("Morate da popunite sve polje");
+                $("#registerResponse").css("visibility", "visible");
+                return;
+            }
+
+            if (pol == "Muski") {
+                pol = false;
+            } else {
+                pol = true;
+            }
+
+
+            let datumRodj = new Date(datumrodjenja);
+            let trenutniDatum = new Date();
+            if (datumRodj >= trenutniDatum) {
+                $("#registerResponse").html("Nevalidan datum");
+                $("#registerResponse").css("visibility", "visible");
+                return;
+            }
+
+            let porukaObject = { ime, prezime, email, datumrodjenja, korisnickoime, lozinka, pol };
+            let poruka = JSON.stringify(porukaObject);
+
+            $.ajax({
+                url: "/register",
+                type: "POST",
+                headers: {
+                    "authtoken": authtoken
+                },
+                data: poruka,
+                contentType: "application/json",
+                dataType: "json",
+                complete: function (data) {
+                    if (data.statusText == "OK" || data.statusText == "Conflict")
+                    {
+                        sessionStorage.setItem("authtoken", data.getResponseHeader("authtoken"));
+                        authtoken = sessionStorage.getItem("authtoken");
+
+                        $(location).prop('href', '/HtmlPages/Index.html');
+                    }
+                    else if (data.responseJSON["Message"] == "PostojiEmail")
+                    {
+                        $("#registerResponse").html("Email je vec zauzet");
+                        $("#registerResponse").css("visibility", "visible");
+                    }
+                    else if (data.responseJSON["Message"] == "PostojiUsername")
+                    {
+                        $("#registerResponse").html("Korisnicko ime je vec zauzet");
+                        $("#registerResponse").css("visibility", "visible");
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="menubar">
+        <ul class="menulist">
+            <li>
+                <a class="menuitem" href="/HtmlPages/Index.html">Početna Stranica</a>
+            </li>
+        </ul>
+    </div>
+    <h1>Registracija</h1>
+    <table style="margin-left: auto; margin-right: auto; margin-bottom: 20px; border: 0px; ">
+        <tr><th>Ime</th> <td style="border:0px;"> <input type="text" id="ime" /></td></tr>
+        <tr><th>Prezime</th> <td style="border:0px;"> <input type="text" id="prezime" /></td></tr>
+        <tr><th>Email</th> <td style="border:0px;"> <input type="email" id="email" /></td></tr>
+        <tr><th>Datum rođenja</th> <td style="border:0px;"> <input type="date" id="datumrodjenja" /></td></tr>
+        <tr><th>Korisnicko Ime</th> <td style="border:0px;"> <input type="text" id="korisnickoime" /></td></tr>
+        <tr><th>Lozinka</th> <td style="border:0px;"> <input type="password" id="lozinka" /></td></tr>
+        <tr>
+            <th>Pol</th>
+            <td style="border:0px;">
+                <select id="pol">
+                    <option value="Muski">Muski</option>
+                    <option value="Zenski">Zenski</option>
+                </select>
+            </td>
+        </tr>
+        <tr><td style="border:0px;" colspan="2"><button onclick="register()" style="width:150px; font-size:20px;">Register</button></td></tr>
+    </table>
+    <h3 id="registerResponse" style="visibility:hidden;"></h3>
+</body>
+</html>

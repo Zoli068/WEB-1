@@ -1,0 +1,26 @@
+[
+  {
+    "naziv": "Lufthansa",
+    "adresa": "21000 Novi Sad",
+    "kontaktinformacije": "Tel:0123456789",
+    "isDeleted": false
+  },
+  {
+    "naziv": "AirSerbia",
+    "adresa": "Beograd",
+    "kontaktinformacije": "Tel:02226789",
+    "isDeleted": false
+  },
+  {
+    "naziv": "RyanAir",
+    "adresa": "London",
+    "kontaktinformacije": "Tel:343211",
+    "isDeleted": false
+  },
+  {
+    "naziv": "BoingLet",
+    "adresa": "Rusko Selo",
+    "kontaktinformacije": "Tel:68686",
+    "isDeleted": false
+  }
+]

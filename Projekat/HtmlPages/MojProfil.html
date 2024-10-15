@@ -1,0 +1,433 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" lang="en" />
+    <title>Moj Profil</title>
+    <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
+    <script src="/Scripts/jquery-3.4.1.js"></script>
+    <script>
+
+        var authtoken = sessionStorage.getItem("authtoken");
+        var listKorisnici;
+
+        function izmeniProfil() {
+
+            let ime = $("#ime").val();
+            let prezime = $("#prezime").val();
+            let email = $("#email").val();
+            let datumrodjenja = $("#datumrodjenja").val();
+            let korisnickoime = $("#korisnickoime").val();
+            let lozinka = $("#lozinka").val();
+            let pol = $("#pol").val();
+
+            $("#updateResponse").css("visibility", "hidden");
+
+            if (ime.trim() == "" || prezime.trim() == "" || email.trim() == "" || datumrodjenja.trim() == "" || korisnickoime.trim() == "" || lozinka.trim() == "" || pol.trim() == "") {
+                $("#updateResponse").html("Morate da popunite sve polje");
+                $("#updateResponse").css("visibility", "visible");
+                return;
+            }
+
+            if (pol == "Muski") {
+                pol = false;
+            } else {
+                pol = true;
+            }
+
+            let datumRodj = new Date(datumrodjenja);
+            let trenutniDatum = new Date();
+            if (datumRodj >= trenutniDatum) {
+                $("#updateResponse").html("Nevalidan datum");
+                $("#updateResponse").css("visibility", "visible");
+                return;
+            }
+
+            let porukaObject = { ime, prezime, email, datumrodjenja, korisnickoime, lozinka, pol };
+            let poruka = JSON.stringify(porukaObject);
+
+            $.ajax({
+                url: "/updateprofil",
+                type: "PUT",
+                data: poruka,
+                headers: {
+                    "authtoken": authtoken
+                },
+                contentType: "application/json",
+                dataType: "json",
+                complete: function (data) {
+                    if (data.statusText == "OK") {
+                        location.reload();
+                    } else {
+                        $("#updateResponse").html("Conflict sa vrednostima");
+                        $("#updateResponse").css("visibility", "visible");
+                    }
+                }
+            });
+        }
+
+        function getKorisnici() {
+
+            $.ajax({
+                url: "/getallkorisnik",
+                type: "GET",
+                headers: {
+                    "authtoken": authtoken
+                },
+                complete: function (data) {
+                    if (data.status == 200) {
+                        listKorisnici = data.responseJSON;
+                        fillTheTable("korisniciTable", listKorisnici);
+                    }
+                }
+            });
+        }
+
+        function fillTheTable(tableName, data) {
+
+            let tableLetovi = "<tr><th>Korisnicko Ime</th><th>Ime<button onclick=\"sortirajTabeluIme(false)\" style=\"font-size:13px;margin-left:10px;\">&#8593;</button><button onclick=\"sortirajTabeluIme(true)\" style=\"font-size:13px;font-weight:bold;margin-left:5px;\">&#8595;</button></th><th>Prezime</th>";
+            tableLetovi+="<th>Datum Rodjenja<button onclick=\"sortirajTabeluDatum(false)\" style=\"font-size:13px;margin-left:10px;\">&#8593;</button><button onclick=\"sortirajTabeluDatum(true)\" style=\"font-size:13px;font-weight:bold;margin-left:5px;\">&#8595;</button> </th><th>Email</th><th>Pol</th><th>Tip Korisnika</th></tr>"
+
+            let pol;
+            let tipkorisnika;
+
+            for (index in data) {
+
+                if (data[index].tipKorisnika == 0) {
+                    tipkorisnika = "Putnik";
+                } else {
+                    tipkorisnika = "Admin";
+                }
+
+                if (data[index].pol == false) {
+                    pol = "Muski";
+                } else {
+                    pol="Zenski";
+                }
+
+
+                tableLetovi += "<tr><td>" + data[index].korisnickoime + "</td><td>" + data[index].ime + "</td><td>" + data[index].prezime + "</td><td>" + data[index].datumrodjenja + "</td>";
+                tableLetovi += "<td>" + data[index].email + "</td><td>" + pol + "</td>";
+                tableLetovi += "<td>" + tipkorisnika + "</td></tr>";
+            }
+
+            $("#" + tableName).html(tableLetovi);
+        }
+
+        $(document).ready(function () {
+
+            if (authtoken == null) {
+                authtoken = "";
+            }
+
+            $.ajax({
+                url: "/checklogin",
+                type: "GET",
+                headers: {
+                    "authtoken": authtoken
+                },
+                complete: function (data) {
+                    if (data.statusText != "OK") {
+
+                        $(location).prop('href', '/HtmlPages/Index.html');
+
+                    }
+                    else {
+
+                        $("#ime").val(data.responseJSON["ime"]);
+                        $("#prezime").val(data.responseJSON["prezime"]);
+                        $("#email").val(data.responseJSON["email"]);
+                        $("#datumrodjenja").val(data.responseJSON["datumrodjenja"]);
+                        $("#korisnickoime").val(data.responseJSON["korisnickoime"]);
+                        $("#lozinka").val(data.responseJSON["lozinka"]);
+
+                        if (data.responseJSON["pol"] == false) {
+                            $("#pol").val("Muski");
+                        } else {
+                            $("#pol").val("Zenski");
+                        }
+
+                        if (data.responseJSON.tipKorisnika == 1) {
+                            $("#adminPanel").css("visibility", "visible");
+                            getKorisnici();
+                        }
+
+                    }
+                }
+            });
+        });
+
+        function pretraga() {
+            let korisnickoime = $("#korisnickoimeInput").val();
+            let ime = $("#imeInput").val();
+            let prezime = $("#prezimeInput").val();
+            let datumrodjenjaOd = $("#datumodInput").val();
+            let datumrodjenjaDo = $("#datumdoInput").val();
+            let email = $("#emailInput").val();
+            let pol = $("#polInput").val();
+            let tipkorisnika = $("#korisniktipInput").val();
+
+            let listRezultati = [];
+
+            let datumOd;
+            let datumdo;
+            let datumPom;
+
+            for (index in listKorisnici) {
+                if (korisnickoime.trim() != "") {
+                    if (listKorisnici[index].korisnickoime.toLowerCase() != korisnickoime.toLowerCase()) {
+                        continue;
+                    }
+                }
+
+                if (ime.trim() != "") {
+                    if (listKorisnici[index].ime.toLowerCase() != ime.toLowerCase()) {
+                        continue;
+                    }
+                }
+
+                if (prezime.trim() != "") {
+                    if (listKorisnici[index].prezime.toLowerCase() != prezime.toLowerCase()) {
+                        continue;
+                    }
+                }
+
+                if (datumrodjenjaOd.trim() != "" && datumrodjenjaDo.trim() == "") {
+                    //Min Datum 
+                    datumOd = new Date(datumrodjenjaOd);
+                    datumPom = new Date(listKorisnici[index].datumrodjenja);
+                    if (datumPom < datumOd) {
+                        continue;
+                    }
+                }
+
+                if (datumrodjenjaOd.trim() == "" && datumrodjenjaDo.trim() != "") {
+                    //Max Datum 
+                    datumDo = new Date(datumrodjenjaDo);
+                    datumPom = new Date(listKorisnici[index].datumrodjenja);
+                    if (datumPom > datumDo) {
+                        continue;
+                    }
+                }
+
+                if (datumrodjenjaOd.trim() != "" && datumrodjenjaDo.trim() != "") {
+                    //Max Datum 
+                    datumDo = new Date(datumrodjenjaDo);
+                    datumOd = new Date(datumrodjenjaOd);
+                    datumPom = new Date(listKorisnici[index].datumrodjenja);
+                    if (datumPom > datumDo || datumPom < datumOd) {
+                        continue;
+                    }
+                }
+
+
+
+                if (email.trim() != "") {
+                    if (listKorisnici[index].email.toLowerCase() != email.toLocaleLowerCase()) {
+                        continue;
+                    }
+                }
+
+                if (pol != "-") {
+                    if (pol == "Muski") {
+                        if (listKorisnici[index].pol != false) {
+                            continue
+                        }
+                    } else if (pol == "Zenski") {
+                        if (listKorisnici[index].pol != true) {
+                            continue;
+                        }
+                    }
+                }
+
+                if (tipkorisnika != "-") {
+                    if (tipkorisnika == "Putnik") {
+                        if (listKorisnici[index].tipKorisnika != 0) {
+                            continue
+                        }
+                    } else if (tipkorisnika == "Admin") {
+                        if (listKorisnici[index].tipKorisnika != 1) {
+                            continue;
+                        }
+                    }
+                }
+
+                listRezultati.push(listKorisnici[index]);
+            }
+
+
+            fillTheTable("korisniciTable", listRezultati);
+            $("#porukaPretrage").html("<h3>Broj odgovarajucih korisnika: " + listRezultati.length + "</h3>");
+
+        }
+
+        function ResetTable() {
+            fillTheTable("korisniciTable", listKorisnici);
+            $("#porukaPretrage").html("");
+        }
+
+        function sortirajTabeluDatum(vrsta_sort) {
+            let korisniciRedovi = $('#korisniciTable tr td:nth-child(4)');
+            let korisniciTablicaChildrens = $('#korisniciTable').children();
+            let i, j, swapIndex;
+            let datum1;
+            let datum2;
+            for (i = 0; i < korisniciRedovi.length - 1; i++) {
+
+                swapIndex = i;
+                korisniciRedovi = $('#korisniciTable tr td:nth-child(4)');
+
+                for (j = i + 1; j < korisniciRedovi.length; j++) {
+
+                    datum1 = new Date(korisniciRedovi[j].innerHTML);
+                    datum2 = new Date(korisniciRedovi[swapIndex].innerHTML);
+                    if (vrsta_sort == true) {
+
+                        if (datum1 < datum2) {
+                            swapIndex = j;
+                        }
+                    }
+                    else {
+
+                        if (datum1 > datum2) {
+                            swapIndex = j;
+                        }
+                    }
+                }
+
+                let pom = i + 1;
+                swapIndex++;
+
+                if (swapIndex != pom) {
+                    let firstRed = korisniciTablicaChildrens[pom].innerHTML;
+                    let secondRed = korisniciTablicaChildrens[swapIndex].innerHTML;
+                    korisniciTablicaChildrens[swapIndex].innerHTML = firstRed;
+                    korisniciTablicaChildrens[pom].innerHTML = secondRed;
+                }
+            }
+        }
+
+        function sortirajTabeluIme(vrsta_sort) {
+            let korisniciRedovi = $('#korisniciTable tr td:nth-child(2)');
+            let korisniciImeRedovi = $('#korisniciTable tr td:nth-child(3)');
+            let korisniciTablicaChildrens = $('#korisniciTable').children();
+            let i, j, swapIndex;
+
+            for (i = 0; i < korisniciRedovi.length - 1; i++) {
+
+                swapIndex = i;
+                korisniciRedovi = $('#korisniciTable tr td:nth-child(2)');
+                korisniciImeRedovi = $('#korisniciTable tr td:nth-child(3)');
+
+                for (j = i + 1; j < korisniciRedovi.length; j++) {
+
+
+                    if (vrsta_sort == true) {
+
+                        if (korisniciRedovi[j].innerHTML.toLowerCase() < korisniciRedovi[swapIndex].innerHTML.toLowerCase()) {
+                            swapIndex = j;
+                        }
+                        else if (korisniciRedovi[j].innerHTML.toLowerCase() == korisniciRedovi[swapIndex].innerHTML.toLowerCase())
+                        {
+                            if (korisniciImeRedovi[j].innerHTML.toLowerCase() < korisniciImeRedovi[swapIndex].innerHTML.toLowerCase()) {
+                                swapIndex = j;
+                            }
+                        }
+                    }
+                    else {
+
+                        if (korisniciRedovi[j].innerHTML.toLowerCase() > korisniciRedovi[swapIndex].innerHTML.toLowerCase()) {
+                            swapIndex = j;
+                        }
+                        else if (korisniciRedovi[j].innerHTML.toLowerCase() == korisniciRedovi[swapIndex].innerHTML.toLowerCase())
+                        {
+                            if (korisniciImeRedovi[j].innerHTML.toLowerCase() > korisniciImeRedovi[swapIndex].innerHTML.toLowerCase()) {
+                                swapIndex = j;
+                            }
+                        }
+                    }
+                }
+
+                let pom = i + 1;
+                swapIndex++;
+
+                if (swapIndex != pom) {
+                    let firstRed = korisniciTablicaChildrens[pom].innerHTML;
+                    let secondRed = korisniciTablicaChildrens[swapIndex].innerHTML;
+                    korisniciTablicaChildrens[swapIndex].innerHTML = firstRed;
+                    korisniciTablicaChildrens[pom].innerHTML = secondRed;
+                }
+            }
+        }
+
+    </script>
+</head>
+<body>
+    <div class="menubar">
+        <ul class="menulist">
+            <li>
+                <a class="menuitem" href="/HtmlPages/Index.html">Početna Stranica</a>
+            </li>
+        </ul>
+    </div>
+    <h1>Moj Profil</h1>
+    <table style="margin-left: auto; margin-right: auto; margin-bottom: 20px; border: 0px; ">
+        <tr><th>Ime</th> <td style="border:0px;"> <input type="text" id="ime" /></td></tr>
+        <tr><th>Prezime</th> <td style="border:0px;"> <input type="text" id="prezime" /></td></tr>
+        <tr><th>Email</th> <td style="border:0px;"> <input disabled type="email" id="email" /></td></tr>
+        <tr><th>Datum rođenja</th> <td style="border:0px;"> <input type="date" id="datumrodjenja" /></td></tr>
+        <tr><th>Korisnicko Ime</th> <td style="border:0px;"> <input disabled  type="text" id="korisnickoime" /></td></tr>
+        <tr><th>Lozinka</th> <td style="border:0px;"> <input type="password" id="lozinka" /></td></tr>
+        <tr>
+            <th>Pol</th>
+            <td style="border:0px;">
+                <select id="pol">
+                    <option value="Muski">Muski</option>
+                    <option value="Zenski">Zenski</option>
+                </select>
+            </td>
+        </tr>
+        <tr><td style="border:0px;" colspan="2"><button onclick="izmeniProfil()" style="width:150px; font-size:20px;">Izmeni</button></td></tr>
+    </table>
+    <h3 id="updateResponse" style="visibility:hidden;"></h3>
+
+    <div id="adminPanel" style="visibility:collapse">
+        <table id="korisniciTable">
+        </table>
+        <h1> Opcije za pretragu</h1>
+
+        <table style="margin-left: auto; margin-right: auto; margin-bottom: 20px; border: 0px; ">
+            <tr><th>Korisnicko Ime</th> <td style="border:0px;"> <input type="text" id="korisnickoimeInput" /></td></tr>
+            <tr><th>Ime</th> <td style="border:0px;"> <input type="text" id="imeInput" /></td></tr>
+            <tr><th>Prezime</th> <td style="border:0px;"> <input type="text" id="prezimeInput" /></td></tr>
+            <tr><th>Datum Rodjenja od</th> <td style="border:0px;"> <input type="date" id="datumodInput" /></td></tr>
+            <tr><th>Datum Rodjenja do</th> <td style="border:0px;"> <input type="date" id="datumdoInput" /></td></tr>
+            <tr><th>Email</th> <td style="border:0px;"> <input type="text" id="emailInput" /></td></tr>
+            <tr>
+                <th>Pol</th>
+                <td style="border:0px;">
+                    <select id="polInput">
+                        <option>-</option>
+                        <option>Muski</option>
+                        <option>Zenski</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Tip Korisnika</th>
+                <td style="border:0px;">
+                    <select id="korisniktipInput">
+                        <option>-</option>
+                        <option>Putnik</option>
+                        <option>Admin</option>
+                    </select>
+                </td>
+            </tr>
+            <tr><td style="border:0px;" colspan="2"><button onclick="pretraga()" style="width:150px; font-size:20px;">Pretraga</button></td></tr>
+            <tr><td style="border:0px;" colspan="2"><button onclick="ResetTable()" style="width:150px; font-size:20px;">Reset</button></td></tr>
+        </table>
+
+        <div style="margin-left:auto; margin-right:auto;" id="porukaPretrage"></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,369 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" lang="en" />
+    <title>Rezervacije</title>
+    <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
+    <script src="/Scripts/jquery-3.4.1.js"></script>
+    <script>
+
+        var authtoken = sessionStorage.getItem("authtoken");
+        var listRezervacija;
+        var prikazenRezervacija;
+        var listLetovi;
+
+        $(document).ready(function () {
+
+            if (authtoken == null) {
+                authtoken = "";
+            }
+
+            $.ajax({
+                url: "/checklogin",
+                type: "GET",
+                headers: {
+                    "authtoken": authtoken
+                },
+                complete: function (data) {
+                    if (data.statusText != "OK") {
+                        $(location).prop('href', '/HtmlPages/Index.html');
+                    } else if (data.responseJSON.tipKorisnik == 1) {
+                        $(location).prop('href', '/HtmlPages/Index.html');
+                    }
+                }
+            });
+
+            $.ajax({
+                url: '/rezervacija/userrezervacije',
+                type: "GET",
+                headers: {
+                    "authtoken": authtoken
+                },
+                complete: function (data) {
+                    listRezervacija = data.responseJSON;
+
+                    if (data.status = 200) {
+
+                        for (index in listRezervacija) {
+                            listRezervacija[index].selected = false;
+                        }
+
+                        fillTheTable("rezervacijetable", data.responseJSON);
+
+                        $("#filtriranje").css("visibility", "visible");
+                        $("#rezervacijetable").css("visibility", "visible");
+                    }
+                }
+            });
+
+            $.ajax({
+                url: '/letovi/get?status=0',
+                type: "GET",
+                headers: {
+                    "authtoken": authtoken
+                },
+                complete: function (data) {
+                    listLetovi = data.responseJSON;
+
+                    fillTheLetoviTable("letovitable", data.responseJSON);
+
+                    $("#letovitable").css("visibility", "visible");
+                }
+            });
+        });
+
+        function selection(index) {
+            if (listLetovi[index].selected) {
+                listLetovi[index].selected = false;
+            } else {
+                listLetovi[index].selected = true;
+            }
+        }
+        function selectionRezervacija(index) {
+            if (prikazenRezervacija[index].selected) {
+                prikazenRezervacija[index].selected = false;
+            } else {
+                prikazenRezervacija[index].selected = true;
+            }
+        }
+
+        function ostaviRecenzija(index) {
+            if (prikazenRezervacija[index].status != 3) {
+                $("#obrisiRespone").html("Za recenziju rezervacija mora da ima status Zavrsen");
+            } else {
+                $("#obrisiRespone").html("");
+                $(location).prop('href', '/HtmlPages/Recenzija.html?id=' + prikazenRezervacija[index].idleta);
+            }
+        }
+
+        function fillTheTable(tableName, data) {
+            prikazenRezervacija = data;
+            let tableRezervacije = "<tr><th>Let</th><th>Broj Putnika</th><th>Status</th><th>Ukupna Cena</th><th>Recenzija</th><th>Selection</th></tr>"
+            var status;
+
+            for (index in data) {
+
+                if (data[index]["status"] == 0) {
+                    status = "Kreirana";
+                } else if (data[index]["status"] == 1) {
+                    status = "Odobrena";
+                }  else if (data[index]["status"] == 2) {
+                    status = "Otkazana";
+                } else {
+                    status = "Zavrsena";
+                }
+               
+                tableRezervacije += "<tr><td><a href=\"/HtmlPages/Let.html?id=" + data[index].idleta + "\">" + data[index].nazivAviokompanija + "</a></td><td>" + data[index].brojputnika + "</td><td>" + status + "</td>";
+                tableRezervacije += "<td>" + data[index].ukupnacena + "</td><td><button onclick=\"ostaviRecenzija("+index+")\">Recenzija</button></td><td><input type=\"checkbox\" onclick=\"selectionRezervacija(" + index+")\"/></td></tr>";
+            }
+
+            $("#" + tableName).html(tableRezervacije);
+        }
+
+        function fillTheLetoviTable(tableName, data) {
+
+            let tableLetovi = "<tr><th>Aviokompanija</th><th>Polazak</th><th>Odredista</th><th>Vreme polaska</th><th>Vreme Dolaska</th><th>Slobodnih Mesta</th><th>Zauzetih Mesta</th><th style=\"min-width:120px;\" >Cena</th><th>Selected</th></tr>"
+
+            for (index in data) {
+                data[index].selected = false;
+                tableLetovi += "<tr><td><a href=\"Aviokompanija.html?naziv=" + data[index].nazivkompanija + "\">" + data[index].nazivkompanija + " </a></td><td>" + data[index].polaznadestinacija + "</td><td>" + data[index].odredisnadestinacija + "</td>";
+                tableLetovi += "<td>" + data[index].vremepolaska.replace("T", " ") + "</td><td>" + data[index].vremedolaska.replace("T", " ") + "</td>";
+                tableLetovi += "<td>" + data[index].slobodnihmesta + "</td><td>" + data[index].zauzetihmesta + "</td><td>" + data[index].cena + "</td> <td><input type=\"checkbox\" onclick=\"selection(" + index + ")\"></tr>";
+            }
+
+            $("#" + tableName).html(tableLetovi);
+        }
+
+        function pretraga() {
+
+            let status=$("#statusInput").val();
+            let statusEnum;
+
+            if (status == "Kreirana" ) {
+                statusEnum = 0;
+            } else if (status == "Odobrena") {
+                statusEnum = 1;
+            } else if (status =="Otkazana") {
+                statusEnum = 2;
+            } else {
+                statusEnum =3;
+            }
+
+            let tempList = [];
+
+            for (index in listRezervacija) {
+                if (listRezervacija[index]["status"] == statusEnum) {
+                    tempList.push(listRezervacija[index]);
+                } else {
+                    listRezervacija[index]["selected"] = false;
+                }
+            }
+
+            fillTheTable("rezervacijetable", tempList);
+        }
+
+        function reset() {
+            fillTheTable("rezervacijetable", listRezervacija);
+        }
+
+        function rezervacija() {
+
+            let brPutnika = $("#brojPutnika").val();
+
+            if (brPutnika < 1) {
+                $("#rezervacijaRespone").html("Broj putnika mora da bude veci od 0");
+                return;
+            } 
+
+            let brSelekcija = 0;
+            let indexLeta = -1;
+
+            for (index in listLetovi) {
+                if (listLetovi[index].selected) {
+                    indexLeta = index;
+                    brSelekcija++;
+                }
+            }
+
+            if (brSelekcija == 0) {
+                $("#rezervacijaRespone").html("Izaberite 1 let za rezervaciju");
+                return;
+            } else if (brSelekcija > 1) {
+                $("#rezervacijaRespone").html("Samo 1 let mozete da izaberite");
+                return;
+            }
+
+            if (listLetovi[indexLeta].slobodnihmesta < brPutnika) {
+                $("#rezervacijaRespone").html("Nema dovoljno slobodnih mesta");
+                return;
+            }
+
+            for (index in listRezervacija) {
+                if (listRezervacija[index].idleta == listLetovi[indexLeta].identificator) {
+                    if (listRezervacija[index].status == 0 || listRezervacija[index].status == 1) {
+                        $("#rezervacijaRespone").html("Vec imate rezervaciju za selektovan let!");
+                        return;
+                    }
+                }
+            }
+            $("#rezervacijaRespone").html("");
+
+            let responseObject = new Object();
+
+            responseObject["idleta"] = listLetovi[indexLeta].identificator;
+            responseObject["brojputnika"] = brPutnika;
+
+            let poruka = JSON.stringify(responseObject);
+
+            $.ajax({
+                url: '/rezervacija/addrezervacija',
+                type: "POST",
+                headers: {
+                    "authtoken": authtoken
+                },
+                data: poruka,
+                contentType: "application/json",
+                dataType: "json",
+                complete: function (data) {
+
+                    if (data.statusText == "OK") {
+                        location.reload();
+                    } else {
+                        $("#rezervacijaRespone").html("Something went wrong");
+                    }
+                }
+            });
+        }
+
+        function deleteRezervacija(){
+
+            let brSelection = 0;
+            let indexRezervacija = -1;
+
+            for (index in prikazenRezervacija) {
+                if (prikazenRezervacija[index].selected) {
+                    brSelection++;
+                    indexRezervacija = index;
+                }
+            }
+
+            if (brSelection == 0) {
+                $("#obrisiRespone").html("Morate da izaberite 1 rezervaciju");
+                return;
+            } else if (brSelection > 1) {
+                $("#obrisiRespone").html("Mozete da izaberite samo 1 rezervaciju");
+                return;
+            }
+
+
+            if (prikazenRezervacija[indexRezervacija].status == 2 || prikazenRezervacija[indexRezervacija].status == 3) {
+                $("#obrisiRespone").html("Rezeravacija za otkazivanje mora da ima status Kreirana ili Odobrena");
+                return;
+            }
+
+
+            $.get('/letovi/getbyid?id=' + prikazenRezervacija[indexRezervacija].idleta + '', function (data, status) {
+
+                if (data == null) {
+                    $("#obrisiRespone").html("Ne postoji let sa id-om");
+                    return;
+                }
+
+
+                console.log(data);
+
+                let currentTime = new Date();
+                currentTime = currentTime.getTime();
+
+                let polaskaTime = new Date(data.vremepolaska);
+                polaskaTime = polaskaTime.getTime();
+
+                //getTime milisekundi od timestamp-a
+                if ((polaskaTime - currentTime) < 86400000) {
+                    $("#obrisiRespone").html("Nemate mogucnost za otkazivanje rezervaciju");
+                    return;
+                }
+
+                let responseObject = new Object();
+                responseObject["idleta"] = prikazenRezervacija[indexRezervacija].idleta;
+
+                let poruka = JSON.stringify(responseObject);
+
+                $.ajax({
+                    url: '/rezervacija/deleterezervacija',
+                    type: "DELETE",
+                    headers: {
+                        "authtoken": authtoken
+                    },
+                    data: poruka,
+                    contentType: "application/json",
+                    dataType: "json",
+                    complete: function (data) {
+
+                        if (data.statusText == "OK") {
+                            $("#obrisiRespone").html("");
+                            location.reload();
+                        } else {
+                            $("#obrisiRespone").html("Something went wrong");
+                        }
+                    }
+                });
+
+
+            });
+           
+        }
+    </script>
+</head>
+<body>
+    <div class="menubar">
+        <ul class="menulist">
+            <li>
+                <a class="menuitem" href="/HtmlPages/Index.html">Početna Stranica</a>
+            </li>
+        </ul>
+    </div>
+    <h1>Svih Rezervacije</h1>
+    <div>
+        <table style="visibility:hidden;" id="rezervacijetable"></table>
+        <table style="border:0px;">
+            <tr><td style="border:0px;" colspan="2"><button onclick="deleteRezervacija()" style="width:150px; font-size:20px;">Otkazivanje</button></td></tr>
+        </table>
+        <h3 id="obrisiRespone"></h3>
+    </div>
+    <div id="filtriranje" style="visibility:hidden;">
+        <h1> Opcije za pretragu</h1>
+        <table style="margin-left: auto; margin-right: auto; margin-bottom: 20px; border: 0px; ">
+            <tr>
+                <th>Status</th>
+                <td style="border:0px;">
+                    <select id="statusInput">
+                        <option>Kreirana</option>
+                        <option>Odobrena</option>
+                        <option>Otkazana</option>
+                        <option>Zavrsena</option>
+                    </select>
+                </td>
+            </tr>
+            <tr><td style="border:0px;" colspan="2"><button onclick="pretraga()" style="width:150px; font-size:20px;">Pretraga</button></td></tr>
+            <tr><td style="border:0px;" colspan="2"><button onclick="reset()" style="width:150px; font-size:20px;">Reset</button></td></tr>
+        </table>
+    </div>
+    <div>
+        <h1>Kreiranje rezervaciju</h1>
+        <table style="visibility:hidden;" id="letovitable">
+        </table>
+        <table style="margin-left: auto; margin-top:20px; margin-right: auto; margin-bottom: 20px; border: 0px; ">
+            <tr>
+                <th>Broj mesta</th>
+                <td style="border:0px;">
+                     <input id="brojPutnika" type="number"/>
+                </td>
+            </tr>
+            <tr><td style="border:0px;" colspan="2"><button onclick="rezervacija()" style="width:150px; font-size:20px;">Rezervacija</button></td></tr>
+        </table>
+        <h3 id="rezervacijaRespone"></h3>
+    </div>
+</body>
+</html>
